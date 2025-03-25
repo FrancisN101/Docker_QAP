@@ -1,0 +1,39 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: Keyin208
+      MYSQL_DATABASE: golfdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  app:
+    build: .
+    container_name: app-container
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/golfdb
+      SPRING_DATASOURCE_USERNAME: root        
+      SPRING_DATASOURCE_PASSWORD: Keyin208   
+    ports:
+      - "8088:8080"                          
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+
+
